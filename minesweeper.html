@@ -1,0 +1,258 @@
+
+<style>
+	*{
+		margin : 0;
+		padding : 0;
+	}
+	#root{
+		margin : 0 auto;
+		width : 1200px;
+
+	}
+	#map{
+	}
+	#map tr td{
+		border : 1px solid black;
+		width : 20px;
+		height : 20px;
+	}
+	#map tr td button{
+		width : 100%;
+		height : 100%;
+	}
+	.mapScale{
+		width : 40px;
+	}
+	.open{
+		background-color : green;
+	}
+	.warring {
+		background-color : red;
+	}
+	.attention {
+		background-color : orange;
+	}
+
+</style>
+<div id="root">
+	<div>
+		<div>
+			<h3>minesweeper</h3>
+		</div>
+		<div>
+			<div>
+				<span> 가로 : </span><input type="number" class="mapScale" id="mapY" value="20">
+				<br>
+				<span> 세로 : </span><input type="number" class="mapScale" id="mapX" value="10">
+				<br>
+				<span> 지뢰수 : </span><input type="number" class="mapScale" id="mineCount" value="40">
+			</div>
+		</div>
+		<div>
+			<button onClick="showMine()">show mine</button>
+			<button onClick="resetGame()">game reset</button>
+		</div>
+	</div>
+	<table id="map"></table>
+</div>
+
+<script>
+	// config
+	{
+		var mapX;
+		var mapY;
+		var mapArr;
+		var minecount;
+
+		var openCount;
+
+		function init(){
+			mapX = document.getElementById("mapX").value || 10;
+			mapY = document.getElementById("mapY").value || 20;
+
+			mapArr = [];
+			minecount =  document.getElementById("mineCount").value || 40;
+
+			openCount = mapX * mapY - minecount;
+		}
+	}
+
+	// 맵초기화
+	function resetGame(){
+		init();
+		createMap(mapX, mapY);
+		setMine();
+	}
+	// 가상 맵 생성
+	function createMap(x = mapX, y = mapY){
+		mapX = x;
+		mapY = y;
+		for(let i=0;i<x;i++){
+			mapArr[i] = [];
+			for(let j=0;j<y;j++){
+				mapArr[i][j] = {
+					isMine : false,
+					e : null,
+					count : 0,
+				};
+			}
+		}
+
+		createMapView();
+	}
+	// 태그 생성 및 가상 맵에 매칭
+	function createMapView(){
+		let mapTable = document.getElementById("map");
+		mapTable.innerHTML = "";
+		let tr = null;
+		let td = null;
+		let btn = null;
+		for(let i=0;i<mapX;i++){
+			let tr = document.createElement("tr");
+			for(let j=0;j<mapY;j++){
+				// 버튼 기능 길어서 분리
+				td = createTile(i,j);
+				tr.appendChild(td);
+			}
+			mapTable.appendChild(tr);
+		}
+	}
+	// 버튼있는 td 생성 + 클릭 이벤트 추가
+	function createTile(x,y){
+		let td = document.createElement("td");
+		let btn = document.createElement("button");
+		mapArr[x][y].e = btn;
+
+		btn.dataset.x = x;
+		btn.dataset.y = y;
+
+		// 버튼 이벤트 추가
+		// 타일 오픈
+		btn.addEventListener("click",function(){
+			// 지뢰 표시 아니면
+			if(!this.classList.contains("attention")){
+				openTile(parseInt(this.dataset.x), parseInt(this.dataset.y));
+			}
+		});
+		// 지뢰 표시
+		btn.addEventListener("contextmenu",function(e){
+			e.preventDefault();
+			if(this.classList.contains("attention")){
+				rmPoint(parseInt(this.dataset.x), parseInt(this.dataset.y));
+			}else{
+				setPoint(parseInt(this.dataset.x), parseInt(this.dataset.y));
+			}
+		});
+		// 좌우 동시 클릭 기능 추가
+
+		td.appendChild(btn);
+		return td;
+	}
+	// 지뢰 배치
+	function setMine(){
+		let ranX = null;
+		let ranY = null;
+
+		while(minecount){
+			ranX = parseInt(Math.random() * mapX);
+			ranY = parseInt(Math.random() * mapY);
+			if(!mapArr[ranX][ranY].isMine){
+				mapArr[ranX][ranY].isMine = true;
+				minecount--;
+			}
+		}
+
+		// 각 타일에 지뢰수 미리 등록
+		for(let i=0;i<mapX;i++){
+			for(let j=0;j<mapY;j++){
+				mapArr[i][j].count = searchMine(i,j);
+			}
+		}
+	}
+	// 주위 지뢰수 확인
+	function searchMine(x, y){
+		let result = 0;
+
+		if(--x >= 0 ){
+			result += mapArr[x][y-1]?.isMine || 0;
+			result += mapArr[x][y]?.isMine || 0;
+			result += mapArr[x][y+1]?.isMine || 0;
+		}
+		x++;
+		result += mapArr[x][y-1]?.isMine || 0;
+		result += mapArr[x][y+1]?.isMine || 0;
+		if(++x < mapX ){
+			result += mapArr[x][y-1]?.isMine || 0;
+			result += mapArr[x][y]?.isMine || 0;
+			result += mapArr[x][y+1]?.isMine || 0;
+		}
+		return result;
+	}
+
+	// 타일 오픈
+	function openTile(x, y){
+		if(mapArr[x][y] && !mapArr[x][y].e.classList.contains("open")){
+			mapArr[x][y].e.classList.add("open");
+			if(mapArr[x][y].isMine){
+				// end game
+				alert("end game");
+			}else{
+				clearCheck();
+				if(mapArr[x][y].count === 0){
+					openAround(x,y);
+				}else{
+					mapArr[x][y].e.innerHTML = searchMine(x, y);
+				}
+			}
+		}
+	}
+	// 주위에 지뢰가 없을 경우 주위 타일도 오픈
+	function openAround(x,y){
+		if(--x >= 0 ){
+			openTile(x,y+1);
+			openTile(x,y);
+			openTile(x,y-1);
+		}
+		x++;
+		openTile(x,y+1);
+		openTile(x,y-1);
+		if(++x < mapX ){
+			openTile(x,y+1);
+			openTile(x,y);
+			openTile(x,y-1);
+		}
+	}
+	// 지뢰 표시
+	function setPoint(x,y){
+		mapArr[x][y].e.classList.add("attention");
+	}
+	// 지뢰 표시 취소
+	function rmPoint(x,y){
+		mapArr[x][y].e.classList.remove("attention");
+	}
+	function clearCheck(){
+		openCount--;
+		if(openCount === 0){
+			alert("clear game");
+		}
+	}
+	// 정답보여줘
+	function showMine(){
+		for(let i=0;i<mapX;i++){
+			for(let j=0;j<mapY;j++){
+				if(mapArr[i][j].isMine){
+					mapArr[i][j].e.classList.add("warring");
+				}
+			}
+		}
+	}
+
+	// 시간 측정
+	function setTime(){
+
+	}
+
+
+	resetGame();
+
+</script>
