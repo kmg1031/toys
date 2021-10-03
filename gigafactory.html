@@ -4,7 +4,6 @@
 		margin : 0 auto;
 	}
 	.objDisplay{
-
 		margin-left : 30px;
 		margin-top : 30px;
 		
@@ -15,14 +14,9 @@
 
 		float: left;
 	}
-
-
 </style>
 
-
-
 <div id="wrap">
-
 	<div>
 		<div>
 			<span>구매처</span><input type="radio" class="storeChk" name="storeChk" id="" data-name="buyStore" checked>
@@ -30,57 +24,30 @@
 			<span>판매처</span><input type="radio" class="storeChk" name="storeChk" id="" data-name="sellStore" >	
 			
 		</div>
-		<span> 품목명 : </span><select name="itemName" id="itemName"></select>
-		<span> 수량 : </span><input type="number" id="itemCount">
-		<button onClick="createItem()">등록</button>
+
+		<div>
+			<span> 품목명 : </span><select name="itemName" id="itemName"></select>
+			<span> 수량 : </span><input type="number" id="itemCount">
+			<button onClick="createItem()">등록</button>
+		</div>
+		<div>
+			<span> 품목명 : </span><select name="makeItemName" id="makeItemName"></select>
+			<span> 수량 : </span><input type="number" id="makeItemCount" value="1">
+			<button onClick="makeItem()">만들기</button>
+			<div>
+				<span>필요 아이템</span>
+				<div class="objDisplay materialsDisplay" id="materialsDisplay"></div>
+			</div>
+		</div>
 	</div>
 	
 	<div id="display">
 		<div class="objDisplay" id="buyStoreDisplay"></div>
 		<div class="objDisplay" id="factoryDisplay"></div>
 		<div class="objDisplay" id="sellStoreDisplay"></div>
-		
-		
 	</div>
-	
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
 <script>
-// 공급처 >> 공장 >> 판매처
-
-
-// 각 작업에는 일정 시간이 필요함 >> 물품의 이동은 차량이 이동 형태로 >> 공장 가동은 생상 시간으로
-// 필요한 부품이 여러개가 있으며 >> 공장에서 만들 품목을 변경할 경우 리모델링 시간이 필요함
-
-// 히든스텟으로 복지가 있음
-// 복지는 수율에 영향을 미침
-
-
-// 재료 설정을 어떻게 할지 알아보자
-// 일단 팩토리오처럼 해봐
-
-// 철판 >> 가공 >> 볼트
-// 일단은 뭐든 살 수 있다고 가정
-// 일단 가격 기능은 빼고 >> 그래도 넣어야하니깐 아이템에 가격 넣을 수 있게 객체로 만들자
-// 갯수도 이따가 넣어 >> 지금 넣을만한가 >> 머리 깨질 일 있니?
-
-
-// 가장 중요한 시간차 기능을 넣어야함
-// 시간차 기능으로인해 생길 수량 버그 들이 문제임
-
-
 // obj
 {
 
@@ -108,114 +75,163 @@
 	}
 	
 	// 품목
-	function Item(name, count){
+	function Item(name, count, isNewItem = false){
 		this.name = name;
 		this.count = count;
+		this.isNewItem = isNewItem;
 	}
 
 	var objPool = [buyStore, factory, sellStore];
 	
-	var itemList = ["철판", "나사", "강철", "돌", "시멘트", "유리"];
+	var itemSelectList = ["철광석","철판", "나사", "강철", "돌", "시멘트", "유리"];
 
+	var itemRecipe = {
+		"철판" : [
+			new Item("철광석",2),
+		],
+		"나사" : [
+			new Item("철판",1),
+		],
+		"강철" : [
+			new Item("철판",5),
+		],
+		"시멘트" : [
+			new Item("돌",2),
+		],
+	};
 
 }
 
-// item controller
 {
-	// view obj - item list 
-	// viewInfo()
-	// 옵저버 패턴 추가 > obj.inventory, itemList
-	{
-		viewInfo();
-		function viewInfo(){
-			objPool.map(e=>viewObj(e));
-		}
-		function viewObj(com){
-			let viewDiv = document.getElementById(com.name+"Display");
-			viewDiv.innerHTML = "";
-			let viewText;
-			
-			com.inventory.map(e=>{
-				viewText = document.createElement("div");
-				viewText.innerHTML = e.name + " : " + e.count;
-				viewDiv.appendChild(viewText);
-			})
-		}
-		viewItemList();
-		function viewItemList(){
-			let itemSelet = document.getElementById("itemName");
-			itemSelet.innserHTML = "";
-			let itemOption;
-			itemList.map(e=>{
-				itemOption = document.createElement("option");
-				itemOption.innerHTML = e;
-				itemOption.value = e;
-				itemSelet.appendChild(itemOption);
-			})
-
-		}
+	viewInfo();
+	function viewInfo(){
+		objPool.map(e=>viewObjInventory(e));
 	}
-
-	// 인벤토리에 재고가 있는지 확인하는 함수
-	// 시간차땜에 수량이 꼬일 수 있거덩
-	function checkItem(com, item){
+	function viewObjInventory(com){
+		let viewDiv = document.getElementById(com.name+"Display");
+		viewDiv.innerHTML = "";
+		let viewText;
 		
+		com.inventory.map(e=>{
+			viewText = document.createElement("div");
+			viewText.innerHTML = e.name + " : " + e.count;
+			viewDiv.appendChild(viewText);
+		});
 	}
-
-	// 창고에 품목이 들어갈때 나갈때
-	// 나중에 금액 확인 로직도 넣어야겠지
-	function inStock(com, item){
-		// 품목 확인하고 있으면 수량 합치고, 금액도 선입 선출해? 해! >> 따로 놔 같은거 있으면 합쳐서 나오도록
-		// 그때 그때 수량 확인 할 것인가 아니면 따로 수량 계산 할 것인가
-		// 그때 그때 확인하는 걸로 합시다
-		// 그럼 필요한 아이템 목록이 있고 하나하나 돌면서 차감하는 방식으로 합시다
-		// 일단은 겹치지않게 입고 >> 나중에 입고 시간 출고 시간도 넣어야 겠네
-		
-		com.inventory.push(item);
-		
+	// 아이템 채워주기
+	viewItemList();
+	function viewItemList(){
+		let itemSelet = document.getElementById("itemName");
+		itemSelet.innserHTML = "";
+		let itemOption;
+		itemSelectList.map(e=>{
+			itemOption = document.createElement("option");
+			itemOption.innerHTML = e;
+			itemOption.value = e;
+			itemSelet.appendChild(itemOption);
+		});
 	}
-	function outStock(com, item){
-		// 여기서 순회하면서 선입 선출로 다가 합시다.
-		// 가상 개체로 미리 계산하고 마지막에 결정
+	// 아이템 제작 기능
+	viewMakeItemList();
+	function viewMakeItemList(){
+		let itemSelet = document.getElementById("makeItemName");
+		itemSelet.innserHTML = "";
+		let itemOption;
 
-
-			
-	}
-	
-	// 배송 - 아이템
-	// 아직 구현 안했으니깐 나중에
-	{
-			function itemLoad(com, item){
-			
-			}
-				
-			function itemUnload(com, item){
-			
-			}
+		for(let e in itemRecipe){
+			itemOption = document.createElement("option");
+			itemOption.innerHTML = e;
+			itemOption.value = e;
+			itemSelet.appendChild(itemOption);
 		}
+	}
+
+	// 제작 아이템 선택하면 >> 해당 레시피 보여주기
+	document.getElementById("makeItemName").addEventListener("change",function(){
+		let viewDiv = document.getElementById("materialsDisplay");
+		viewDiv.innerHTML = "";
+		let viewText;
+
+		itemRecipe[this.value].map(e=>{
+			viewText = document.createElement("div");
+			viewText.innerHTML = e.name + " : " + e.count;
+			viewDiv.appendChild(viewText);
+		});
+	})
 }
 
+function inStock(com, item){
+	let addItem = searchInventoryToItem(com.inventory, item.name);
+		if(addItem.isNewItem || addItem === false){
+			com.inventory.push(item);
+		}else{
+			addItem.count += item.count;
+		}
+}
+function outStock(com, item){
+
+}
+
+// 배송 - 아이템
+{
+	function itemLoad(com, item){
+	
+	}
+		
+	function itemUnload(com, item){
+	
+	}
+}
+
+
+// 아이템 제조 - 1공정
+function makeItem(){
+	let makeItemName = document.getElementById("makeItemName").value;
+	let makeItemCount = parseInt(document.getElementById("makeItemCount").value);
+
+	let inventory = factory.inventory;
+	
+	// itemRecipe[makeItemName].map((material,i)=>{
+	let material = itemRecipe[makeItemName][0];
+
+	let searchItem = searchInventoryToItem(inventory, material.name);
+	if( searchItem === false || searchItem.count < material.count * makeItemCount){
+		console.log("재료 없음");
+		return;
+	}else{
+		searchItem.count -= material.count * makeItemCount;
+		inStock(factory, new Item(makeItemName, makeItemCount));
+	}
+
+	viewInfo();
+}
+function searchInventoryToItem(arr, itemName){
+	for(let i=0;i<arr.length;i++){
+		if(itemName === arr[i].name){
+			return arr[i];
+		}
+	}
+	return false;
+}
+
+function createItem(){
+	let objName = document.querySelectorAll(".storeChk:checked")[0].dataset.name;
+	let store = window[objName];
+
+	let itemName = document.getElementById("itemName").value;
+	let itemCount = document.getElementById("itemCount").value;
+
+	inStock(store, new Item(itemName, itemCount));
+
+	viewInfo();
+}
 
 // test
-{
-	function createItem(){
-		let objName = document.querySelectorAll(".storeChk:checked")[0].dataset.name;
-		let store = window[objName];
+inStock(factory, new Item("철광석", 9999));
+inStock(factory, new Item("철판", 9999));
+viewInfo();
 
-		let itemName = document.getElementById("itemName").value;
-		let itemCount = document.getElementById("itemCount").value;
-
-		inStock(store, new Item(itemName, itemCount));
-
-		viewInfo();
-	}
-}
-
-
-// play
-
-
-
+document.getElementById("makeItemName").dispatchEvent(new Event('change', { bubbles: true }));
 
 
 
