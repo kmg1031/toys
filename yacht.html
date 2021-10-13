@@ -1,0 +1,408 @@
+<style>
+	*{
+		margin : 0;
+		padding : 0;
+	}
+	#content{
+		width : 1000px;
+		margin : 0 auto;
+	}
+	.display{
+		border : 1px solid black;
+	}
+
+	#scoreTable,#diceTable{
+		width : 400px;
+		height : 600px;
+
+		margin : 0 20px;
+
+		float : left;
+	}
+	#scoreSelect{
+		width : 100%;
+	}
+	#scoreSelect tr{
+		width : 100%;
+	}
+	#scoreSelect tr td{
+		width : 33%;
+		height : 30px;
+		border : 1px solid black;
+	}
+	.lfloat{
+		float : left;
+	}
+	#diceBoard{
+		width : 100%;
+		height : 400px;
+		margin-top : 50%;
+	}
+	#dicelock>div,#diceNumber>div{
+		width : 70px;
+	}
+	button.checked{
+		display : none;
+	}
+</style>
+
+
+<div id="wrap">
+	<div id="content">
+
+		<div class="display" id="scoreTable">
+			<table id="scoreSelect">
+				<tr id="one">
+					<td class="scoreTitle"><span>1</span></td>
+					<td class="scoreVal"><span>0</span></td>
+					<td class="scoreSelect"><button class="selectBtn numScore">선택</button></td>
+				</tr>
+				<tr id="two">
+					<td class="scoreTitle"><span>2</span></td>
+					<td class="scoreVal"><span>0</span></td>
+					<td class="scoreSelect"><button class="selectBtn numScore">선택</button></td>
+				</tr>
+				<tr id="three">
+					<td class="scoreTitle"><span>3</span></td>
+					<td class="scoreVal"><span>0</span></td>
+					<td class="scoreSelect"><button class="selectBtn numScore">선택</button></td>
+				</tr>
+				<tr id="four">
+					<td class="scoreTitle"><span>4</span></td>
+					<td class="scoreVal"><span>0</span></td>
+					<td class="scoreSelect"><button class="selectBtn numScore">선택</button></td>
+				</tr>
+				<tr id="five">
+					<td class="scoreTitle"><span>5</span></td>
+					<td class="scoreVal"><span>0</span></td>
+					<td class="scoreSelect"><button class="selectBtn numScore">선택</button></td>
+				</tr>
+				<tr id="six">
+					<td class="scoreTitle"><span>6</span></td>
+					<td class="scoreVal"><span>0</span></td>
+					<td class="scoreSelect"><button class="selectBtn numScore">선택</button></td>
+				</tr>
+				<tr id="mission">
+					<td class="scoreTitle"><span>미션</span></td>
+					<td class="scoreVal"><span>0</span></td>
+					<td class="scoreSelect"><span id="missionSum">0</span></td>
+				</tr>
+				<tr id="bonus">
+					<td class="scoreTitle"><span>보너스</span></td>
+					<td class="scoreVal"><span>0</span></td>
+					<td class="scoreSelect"><button class="selectBtn numScore">선택</button></td>
+				</tr>
+				<tr id="fourcard">
+					<td class="scoreTitle"><span>포카드</span></td>
+					<td class="scoreVal"><span>0</span></td>
+					<td class="scoreSelect"><button class="selectBtn setScore">선택</button></td>
+				</tr>
+				<tr id="fullhouse">
+					<td class="scoreTitle"><span>풀하우스</span></td>
+					<td class="scoreVal"><span>0</span></td>
+					<td class="scoreSelect"><button class="selectBtn setScore">선택</button></td>
+				</tr>
+				<tr id="sstraight">
+					<td class="scoreTitle"><span>s스트레이트</span></td>
+					<td class="scoreVal"><span>0</span></td>
+					<td class="scoreSelect"><button class="selectBtn setScore">선택</button></td>
+				</tr>
+				<tr id="lstraight">
+					<td class="scoreTitle"><span>l스트레이트</span></td>
+					<td class="scoreVal"><span>0</span></td>
+					<td class="scoreSelect"><button class="selectBtn setScore">선택</button></td>
+				</tr>
+				<tr id="tachu">
+					<td class="scoreTitle"><span>야츄</span></td>
+					<td class="scoreVal"><span>0</span></td>
+					<td class="scoreSelect"><button class="selectBtn setScore">선택</button></td>
+				</tr>
+				<tr id="total">
+					<td class="scoreTitle"><span>합계</span></td>
+					<td class="scoreVal"><span id="totalScore">0</span></td>
+					<td class="scoreSelect"></td>
+				</tr>
+				
+				
+			</table>
+
+
+		</div>
+		<div class="display" id="diceTable">
+			<div><button onClick="reStart();">restart</button></div>
+			<div id="diceBoard">
+				<div id="dicelock">
+					<div class="lfloat"><input type="checkbox" class="diceLock" id=""></div>
+					<div class="lfloat"><input type="checkbox" class="diceLock" id=""></div>
+					<div class="lfloat"><input type="checkbox" class="diceLock" id=""></div>
+					<div class="lfloat"><input type="checkbox" class="diceLock" id=""></div>
+					<div class="lfloat"><input type="checkbox" class="diceLock" id=""></div>
+				</div>
+				<div id="diceNumber">
+					<div class="lfloat"><span class="diceVal">0</span></div>
+					<div class="lfloat"><span class="diceVal">0</span></div>
+					<div class="lfloat"><span class="diceVal">0</span></div>
+					<div class="lfloat"><span class="diceVal">0</span></div>
+					<div class="lfloat"><span class="diceVal">0</span></div>
+				</div>
+				<div id="diceAction">
+					<div><button onClick="reRoll()">리롤</button></div>
+				</div>
+			</div>
+
+
+		</div>
+	</div>
+</div>
+
+
+
+<script>
+
+
+
+var scoreVal = {};
+var scoreTmp = {};
+var scoreCheck = {};
+var docScoreVal;
+var docScoreSelect;
+
+var diceArr = [];
+var docDiceArr;
+var docLockArr;
+var rerollCount = 0;
+
+function init(){
+	docScoreVal = document.querySelectorAll(".scoreVal");
+	docScoreSelect = document.querySelectorAll(".scoreSelect");
+
+	docLockArr = document.querySelectorAll(".diceLock");
+	docDiceArr = document.querySelectorAll(".diceVal");
+
+	rerollCount = 0;
+
+	scoreVal = {
+		"one"		: 0,
+		"two"		: 0,
+		"three"		: 0,
+		"four"		: 0,
+		"five"		: 0,
+		"six"		: 0,
+		"mission"	: 0,
+		"bonus"		: 0,
+		"fourcard"	: 0,
+		"fullhouse"	: 0,
+		"sstraight"	: 0,
+		"lstraight"	: 0,
+		"tachu"		: 0,
+	}
+	scoreCheck = {
+		"one"		: false,
+		"two"		: false,
+		"three"		: false,
+		"four"		: false,
+		"five"		: false,
+		"six"		: false,
+		"mission"	: true,
+		"bonus"		: false,
+		"fourcard"	: false,
+		"fullhouse"	: false,
+		"sstraight"	: false,
+		"lstraight"	: false,
+		"tachu"		: false,
+	}
+
+	reRoll();
+}
+function reStart(){
+	rerollCount = 0;
+
+	scoreVal = {
+		"one"		: 0,
+		"two"		: 0,
+		"three"		: 0,
+		"four"		: 0,
+		"five"		: 0,
+		"six"		: 0,
+		"mission"	: 0,
+		"bonus"		: 0,
+		"fourcard"	: 0,
+		"fullhouse"	: 0,
+		"sstraight"	: 0,
+		"lstraight"	: 0,
+		"tachu"		: 0,
+	}
+	scoreCheck = {
+		"one"		: false,
+		"two"		: false,
+		"three"		: false,
+		"four"		: false,
+		"five"		: false,
+		"six"		: false,
+		"mission"	: true,
+		"bonus"		: false,
+		"fourcard"	: false,
+		"fullhouse"	: false,
+		"sstraight"	: false,
+		"lstraight"	: false,
+		"tachu"		: false,
+	}
+
+	scoreReset();
+	reRoll();
+}
+
+function viewDisplay(){
+	viewDice();
+	viewScore();
+}
+function viewDice(){
+	for(let i=0;i<5;i++){
+		docDiceArr[i].textContent = diceArr[i];
+	}
+}
+function viewScore(){
+	for (const key in scoreVal) {
+		document.getElementById(key).getElementsByClassName("scoreVal")[0].getElementsByTagName("span")[0].innerHTML = scoreCheck[key]?scoreVal[key]:scoreTmp[key];
+	}
+}
+// 점수 확정
+document.querySelectorAll(".selectBtn").forEach(e=>{
+	e.addEventListener("click",function(){
+		let key = this.parentNode.parentNode.id;
+		if(!scoreCheck[key]){
+			scoreVal[key] = scoreTmp[key];
+			scoreCheck[key] = true;
+			// 미션 확인
+			checkMission();
+			// 합계 출력
+			setTotalScore();
+			// 점수 버튼 디자인
+			this.classList.add('checked');
+			// 리롤 리셋
+			rerollCount = 0;
+			// 주사위 잠금 풀기
+			for(let i=0;i<5;i++){
+				docLockArr[i].checked = false;
+			}
+			reRoll();
+		}
+	});
+});
+
+// 미션 확인
+function checkMission(){
+	let missionSum = scoreVal['one']+scoreVal['two']+scoreVal['three']+scoreVal['four']+scoreVal['five']+scoreVal['six'];
+	document.getElementById("missionSum").innerHTML = missionSum;
+	if(missionSum > 54){
+		scoreVal['mission'] = 50;
+	}
+}
+function setTotalScore(){
+	let totalScore = 0;
+	for (const key in scoreVal) {
+		totalScore += scoreVal[key];
+	}
+	document.getElementById("totalScore").innerHTML = totalScore;
+}
+function scoreReset(){
+	// 점수판 리셋
+	for (const key in scoreVal) {
+		document.getElementById(key).getElementsByClassName("scoreVal")[0].getElementsByTagName("span")[0].innerHTML = 0;
+	}
+	document.getElementById("missionSum").innerHTML = 0;
+	// 버튼 리셋
+	document.querySelectorAll(".selectBtn").forEach(e=>{
+		e.classList.remove('checked');
+	});
+}
+
+// 주사위 굴리기
+function reRoll(){
+	if(rerollCount < 3){
+		rerollCount++;
+
+		for(let i=0;i<5;i++){
+			if(!docLockArr[i].checked){
+				diceArr[i] = parseInt(Math.random() * 6) + 1;
+			}
+		}
+
+		checkSet();
+		viewDisplay();
+	}
+}
+
+function checkSet(){
+	scoreTmp = {
+		"one"		: 0,
+		"two"		: 0,
+		"three"		: 0,
+		"four"		: 0,
+		"five"		: 0,
+		"six"		: 0,
+		"mission"	: 0,
+		"bonus"		: 0,
+		"fourcard"	: 0,
+		"fullhouse"	: 0,
+		"sstraight"	: 0,
+		"lstraight"	: 0,
+		"tachu"		: 0,
+	};
+	let arr = [...diceArr];
+	let numArr = [0,0,0,0,0,0,0];
+	let numArrCnt = [0,0,0,0,0,0,0];
+	let maxCount = 0;
+	let bonus = 0;
+	let setArr = {};
+	let stStack = 0;
+
+	// num score
+	arr.map((e)=>{
+		numArr[e]++;
+		bonus += e;
+	});
+	scoreTmp['one']		= numArr[1] * 1;
+	scoreTmp['two']		= numArr[2] * 2;
+	scoreTmp['three']	= numArr[3] * 3;
+	scoreTmp['four']	= numArr[4] * 4;
+	scoreTmp['five']	= numArr[5] * 5;
+	scoreTmp['six']		= numArr[6] * 6;
+	scoreTmp['bonus']	= bonus;
+
+	// set score
+	if(numArr.indexOf(4) !== -1){
+		scoreTmp['fourcard'] = numArr.indexOf(4) * 4;
+	}
+	if(numArr.indexOf(5) !== -1){
+		scoreTmp['fourcard'] = numArr.indexOf(4) * 5;
+		scoreTmp['aycht'] = 50;
+	}
+
+	if(numArr.indexOf(3) !== -1 && numArr.indexOf(2) !== -1){
+		scoreTmp['fullhouse'] = (numArr.indexOf(3) * 3) + (numArr.indexOf(2) * 2);
+	}
+
+	// 연속된 길이 구하기
+	for(let i=1;i<numArrCnt.length;i++){
+		numArrCnt[i] = numArr[i]?numArrCnt[i-1]+1:0; 
+	}
+	maxCount = Math.max.apply(null,numArrCnt);
+	if(maxCount === 5){
+		scoreTmp['lstraight'] = 30;
+		scoreTmp['sstraight'] = 15;
+	}else if(maxCount === 4){
+		scoreTmp['sstraight'] = 15;
+	}
+
+	scoreTmp;
+
+}
+
+
+// play
+init();
+reStart();
+
+
+</script>
