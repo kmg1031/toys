@@ -1,0 +1,552 @@
+<style>
+	*{
+		margin : 0;
+		padding : 0;
+	}
+	#gameBoard>ul{
+		list-style: none;
+		overflow: hidden;
+	}
+	#gameBoard>ul>li{
+		width : 15px;
+		height : 15px;
+		float: left;
+		border : 1px solid black;
+	}
+	#gameBoard .red{
+		background-color: red;
+	}
+	#gameBoard .green{
+		background-color: green;
+	}
+	#gameBoard .orange{
+		background-color: orange;
+	}
+	#gameBoard .black{
+		background-color: black;
+	}
+	#gameBoard .block{
+		background-color: rgb(80, 80, 80);
+	}
+</style>
+<body>
+	<div id="wrap">
+		<div id="board">
+			<div id="gameBoard">
+				<ul>
+					<li id="tile0_0"></li>
+					<li id="tile0_1"></li>
+					<li id="tile0_2"></li>
+					<li id="tile0_3"></li>
+					<li id="tile0_4"></li>
+					<li id="tile0_5"></li>
+					<li id="tile0_6"></li>
+					<li id="tile0_7"></li>
+					<li id="tile0_8"></li>
+					<li id="tile0_9"></li>
+				</ul>
+				<ul>
+					<li id="tile1_0"></li>
+					<li id="tile1_1"></li>
+					<li id="tile1_2"></li>
+					<li id="tile1_3"></li>
+					<li id="tile1_4"></li>
+					<li id="tile1_5"></li>
+					<li id="tile1_6"></li>
+					<li id="tile1_7"></li>
+					<li id="tile1_8"></li>
+					<li id="tile1_9"></li>
+				</ul>
+				<ul>
+					<li id="tile2_0"></li>
+					<li id="tile2_1"></li>
+					<li id="tile2_2"></li>
+					<li id="tile2_3"></li>
+					<li id="tile2_4"></li>
+					<li id="tile2_5"></li>
+					<li id="tile2_6"></li>
+					<li id="tile2_7"></li>
+					<li id="tile2_8"></li>
+					<li id="tile2_9"></li>
+				</ul>
+				<ul>
+					<li id="tile3_0"></li>
+					<li id="tile3_1"></li>
+					<li id="tile3_2"></li>
+					<li id="tile3_3"></li>
+					<li id="tile3_4"></li>
+					<li id="tile3_5"></li>
+					<li id="tile3_6"></li>
+					<li id="tile3_7"></li>
+					<li id="tile3_8"></li>
+					<li id="tile3_9"></li>
+				</ul>
+				<ul>
+					<li id="tile4_0"></li>
+					<li id="tile4_1"></li>
+					<li id="tile4_2"></li>
+					<li id="tile4_3"></li>
+					<li id="tile4_4"></li>
+					<li id="tile4_5"></li>
+					<li id="tile4_6"></li>
+					<li id="tile4_7"></li>
+					<li id="tile4_8"></li>
+					<li id="tile4_9"></li>
+				</ul>
+				<ul>
+					<li id="tile5_0"></li>
+					<li id="tile5_1"></li>
+					<li id="tile5_2"></li>
+					<li id="tile5_3"></li>
+					<li id="tile5_4"></li>
+					<li id="tile5_5"></li>
+					<li id="tile5_6"></li>
+					<li id="tile5_7"></li>
+					<li id="tile5_8"></li>
+					<li id="tile5_9"></li>
+				</ul>
+				<ul>
+					<li id="tile6_0"></li>
+					<li id="tile6_1"></li>
+					<li id="tile6_2"></li>
+					<li id="tile6_3"></li>
+					<li id="tile6_4"></li>
+					<li id="tile6_5"></li>
+					<li id="tile6_6"></li>
+					<li id="tile6_7"></li>
+					<li id="tile6_8"></li>
+					<li id="tile6_9"></li>
+				</ul>
+				<ul>
+					<li id="tile7_0"></li>
+					<li id="tile7_1"></li>
+					<li id="tile7_2"></li>
+					<li id="tile7_3"></li>
+					<li id="tile7_4"></li>
+					<li id="tile7_5"></li>
+					<li id="tile7_6"></li>
+					<li id="tile7_7"></li>
+					<li id="tile7_8"></li>
+					<li id="tile7_9"></li>
+				</ul>
+				<ul>
+					<li id="tile8_0"></li>
+					<li id="tile8_1"></li>
+					<li id="tile8_2"></li>
+					<li id="tile8_3"></li>
+					<li id="tile8_4"></li>
+					<li id="tile8_5"></li>
+					<li id="tile8_6"></li>
+					<li id="tile8_7"></li>
+					<li id="tile8_8"></li>
+					<li id="tile8_9"></li>
+				</ul>
+				<ul>
+					<li id="tile9_0"></li>
+					<li id="tile9_1"></li>
+					<li id="tile9_2"></li>
+					<li id="tile9_3"></li>
+					<li id="tile9_4"></li>
+					<li id="tile9_5"></li>
+					<li id="tile9_6"></li>
+					<li id="tile9_7"></li>
+					<li id="tile9_8"></li>
+					<li id="tile9_9"></li>
+				</ul>
+				<ul>
+					<li id="tile10_0"></li>
+					<li id="tile10_1"></li>
+					<li id="tile10_2"></li>
+					<li id="tile10_3"></li>
+					<li id="tile10_4"></li>
+					<li id="tile10_5"></li>
+					<li id="tile10_6"></li>
+					<li id="tile10_7"></li>
+					<li id="tile10_8"></li>
+					<li id="tile10_9"></li>
+				</ul>
+				<ul>
+					<li id="tile11_0"></li>
+					<li id="tile11_1"></li>
+					<li id="tile11_2"></li>
+					<li id="tile11_3"></li>
+					<li id="tile11_4"></li>
+					<li id="tile11_5"></li>
+					<li id="tile11_6"></li>
+					<li id="tile11_7"></li>
+					<li id="tile11_8"></li>
+					<li id="tile11_9"></li>
+				</ul>
+				<ul>
+					<li id="tile12_0"></li>
+					<li id="tile12_1"></li>
+					<li id="tile12_2"></li>
+					<li id="tile12_3"></li>
+					<li id="tile12_4"></li>
+					<li id="tile12_5"></li>
+					<li id="tile12_6"></li>
+					<li id="tile12_7"></li>
+					<li id="tile12_8"></li>
+					<li id="tile12_9"></li>
+				</ul>
+				<ul>
+					<li id="tile13_0"></li>
+					<li id="tile13_1"></li>
+					<li id="tile13_2"></li>
+					<li id="tile13_3"></li>
+					<li id="tile13_4"></li>
+					<li id="tile13_5"></li>
+					<li id="tile13_6"></li>
+					<li id="tile13_7"></li>
+					<li id="tile13_8"></li>
+					<li id="tile13_9"></li>
+				</ul>
+				<ul>
+					<li id="tile14_0"></li>
+					<li id="tile14_1"></li>
+					<li id="tile14_2"></li>
+					<li id="tile14_3"></li>
+					<li id="tile14_4"></li>
+					<li id="tile14_5"></li>
+					<li id="tile14_6"></li>
+					<li id="tile14_7"></li>
+					<li id="tile14_8"></li>
+					<li id="tile14_9"></li>
+				</ul>
+				<ul>
+					<li id="tile15_0"></li>
+					<li id="tile15_1"></li>
+					<li id="tile15_2"></li>
+					<li id="tile15_3"></li>
+					<li id="tile15_4"></li>
+					<li id="tile15_5"></li>
+					<li id="tile15_6"></li>
+					<li id="tile15_7"></li>
+					<li id="tile15_8"></li>
+					<li id="tile15_9"></li>
+				</ul>
+				<ul>
+					<li id="tile16_0"></li>
+					<li id="tile16_1"></li>
+					<li id="tile16_2"></li>
+					<li id="tile16_3"></li>
+					<li id="tile16_4"></li>
+					<li id="tile16_5"></li>
+					<li id="tile16_6"></li>
+					<li id="tile16_7"></li>
+					<li id="tile16_8"></li>
+					<li id="tile16_9"></li>
+				</ul>
+				<ul>
+					<li id="tile17_0"></li>
+					<li id="tile17_1"></li>
+					<li id="tile17_2"></li>
+					<li id="tile17_3"></li>
+					<li id="tile17_4"></li>
+					<li id="tile17_5"></li>
+					<li id="tile17_6"></li>
+					<li id="tile17_7"></li>
+					<li id="tile17_8"></li>
+					<li id="tile17_9"></li>
+				</ul>
+				<ul>
+					<li id="tile18_0"></li>
+					<li id="tile18_1"></li>
+					<li id="tile18_2"></li>
+					<li id="tile18_3"></li>
+					<li id="tile18_4"></li>
+					<li id="tile18_5"></li>
+					<li id="tile18_6"></li>
+					<li id="tile18_7"></li>
+					<li id="tile18_8"></li>
+					<li id="tile18_9"></li>
+				</ul>
+				<ul>
+					<li id="tile19_0"></li>
+					<li id="tile19_1"></li>
+					<li id="tile19_2"></li>
+					<li id="tile19_3"></li>
+					<li id="tile19_4"></li>
+					<li id="tile19_5"></li>
+					<li id="tile19_6"></li>
+					<li id="tile19_7"></li>
+					<li id="tile19_8"></li>
+					<li id="tile19_9"></li>
+				</ul>
+				
+
+			</div>
+		</div>
+	</div>
+</body>
+<script>
+
+	var map = [];
+	var currentBlock = [];
+	var origin = new Tile(0,0);
+	var startInterval;
+
+	function Tile(x, y, classArr=[]){
+		this.x = x;
+		this.y = y;
+		this.classArr = classArr;
+	}
+	// 맵 크기 설정
+	for(let i=0;i<20;i++){
+		map[i] = [];
+		for(let j=0;j<10;j++){
+			map[i][j] = new Tile(j,i,[]);
+		}	
+	}
+	// 전체 맵 업데이트
+	function updateMap(){
+		for(let i=0;i<20;i++){
+			for(let j=0;j<10;j++){
+				updateTile(i,j);
+			}	
+		}
+	}
+	function updateTile(y, x){
+		let tile = document.getElementById("tile"+y+"_"+x);
+		tile.className = map[y][x].classArr.join(" ");
+	}
+
+	// 진행중인 블록 다시 그리기
+	function clearCerrentBlock(){
+		currentBlock.map((v,i)=>{
+			map[v.y][v.x].classArr = [];
+		});
+	}
+	function updateCerrentBlock(){
+		currentBlock.map((v,i)=>{
+			map[v.y][v.x].classArr = v.classArr
+		});
+	}
+	// 이동
+	document.addEventListener("keydown",function(e){
+		clearCerrentBlock();
+		moveBlock(e.keyCode);
+		updateCerrentBlock();
+		updateMap();
+	});
+	function moveBlock(keyCode){
+		// down
+		if(keyCode === 40){ moveDown(); }
+		// right
+		if(keyCode === 39){ moveRight() }
+		// up 회전
+		if(keyCode === 38){	moveUp(); }
+		// left
+		if(keyCode === 37){ moveLeft() }
+	}
+	function moveUp(){
+		if(currentKind){
+			rotateBlock();
+		}
+	}
+	function moveDown(){
+		if(bottomCheck()){
+			// 바닥 만들고 새로 블럭 생성
+			putBlock();
+		}else{
+			origin.y++;
+			currentBlock.map((v,i)=>{
+				v.y++;
+			});
+		}
+	}
+	function moveRight(){
+		if(!currentBlock.some((v,i)=>{ return v.x === 9 || map[v.y][v.x+1].classArr.indexOf("block") !== -1})){
+			origin.x++;
+			currentBlock.map((v,i)=>{
+				v.x++;
+			});
+		}
+	}
+	function moveLeft(){
+		if(!currentBlock.some((v,i)=>{ return v.x === 0 || map[v.y][v.x-1].classArr.indexOf("block") !== -1})){
+			origin.x--;
+			currentBlock.map((v,i)=>{
+				v.x--;
+			});
+		}
+	}
+
+	function rotateBlock(){
+		if(!currentBlock.some((v,i)=>{
+			let x = v.x - origin.x;
+			let y = v.y - origin.y
+
+			let pathX = origin.x - y;
+			let pathY = origin.y + x;
+
+			return pathX < 0 || pathX > 9 || pathY < 0 || pathY > 19 || map[pathY][pathX].classArr.indexOf("block") !== -1;
+		})){
+			currentBlock.map((v,i)=>{
+				let x = v.x - origin.x;
+				let y = v.y - origin.y
+
+				v.x = origin.x - y;
+				v.y = origin.y + x;
+			});
+		}
+	}
+	// 바닥 검사
+	function bottomCheck(){
+		return currentBlock.some((v,i)=>{
+			return v.y === 19 || document.getElementById("tile"+(v.y+1)+"_"+v.x).classList.contains("block");
+		});
+	}
+	// 블록 놓기
+	function putBlock(){
+		currentBlock.map((v,i)=>{
+			map[v.y][v.x].classArr = [];
+		});
+		currentBlock.map((v,i)=>{
+			map[v.y][v.x].classArr = ['block'];
+		});
+		tetrisCheck();
+		newBlock();
+	}
+	// 새 블록 생성
+	function newBlock(){
+		
+		currentBlock = [];
+		// 랜덤으로
+		currentKind = parseInt(Math.random()*7);
+		currentBlock = blockKind(currentKind);
+		updateCerrentBlock();
+		updateMap();
+		// endCheck();
+	}
+	
+	// 여러가지 블록 모양
+	function blockKind(kind){
+		switch (kind) {
+			case 0:
+				return [
+					new Tile(4,0,['red']),
+					new Tile(5,0,['red']),
+					new Tile(4,1,['red']),
+					new Tile(5,1,['red'])
+				];
+				break;
+			case 1:
+				origin.x = 4;
+				origin.y = 0;
+				return [
+					new Tile(3,0,['red']),
+					new Tile(4,0,['red']),
+					new Tile(5,0,['red']),
+					new Tile(6,0,['red'])
+				];
+				break;
+			case 2:
+				origin.x = 5;
+				origin.y = 1;
+				return [
+					new Tile(4,0,['red']),
+					new Tile(5,0,['red']),
+					new Tile(5,1,['red']),
+					new Tile(5,2,['red'])
+				];
+				break;
+			case 3:
+				origin.x = 5;
+				origin.y = 1;
+				return [
+					new Tile(4,0,['red']),
+					new Tile(5,0,['red']),
+					new Tile(4,1,['red']),
+					new Tile(4,2,['red'])
+				];
+				break;
+			case 4:
+				origin.x = 5;
+				origin.y = 1;
+				return [
+					new Tile(4,0,['red']),
+					new Tile(5,0,['red']),
+					new Tile(6,0,['red']),
+					new Tile(5,1,['red'])
+				];
+				break;
+			case 5:
+				origin.x = 5;
+				origin.y = 1;
+				return [
+					new Tile(4,0,['red']),
+					new Tile(4,1,['red']),
+					new Tile(5,1,['red']),
+					new Tile(5,2,['red'])
+				];
+				break;
+			case 6:
+				origin.x = 5;
+				origin.y = 1;
+				return [
+					new Tile(5,0,['red']),
+					new Tile(5,1,['red']),
+					new Tile(4,1,['red']),
+					new Tile(4,2,['red'])
+				];
+				break;
+			default:
+				return [new Tile(0,5,['red'])];
+				break;
+		}
+	}
+	
+	// 한줄 채우기 체크
+	function tetrisCheck(){
+		map.map((line,i)=>{
+			//한줄씩
+			if(line.every((tile,j)=>{
+				return tile.classArr.indexOf("block") !== -1;
+			})){
+				tetris(i);
+			}
+		})
+	}
+
+	// 한줄 제거
+	function tetris(lineIdx){
+		// 테트리스!
+		console.log("테트리스!");
+		// 맵 옮기고
+		for(let j=lineIdx;j>1;j--){
+			map[j].map((t,k)=>{
+				map[j][k].classArr = map[j-1][k].classArr;
+			});
+		}
+		// 첫줄까지 지워주고
+		map[0].map((t,k)=>{
+			map[0][k].classArr = [];
+		});
+	}
+	
+	// 나오는곳 막히면 끝
+	function endCheck(){
+		if(map[0][4].classArr.indexOf('block') || map[0][5].classArr.indexOf('block') || map[0][6].classArr.indexOf('block')){
+			clearInterval(startInterval);
+		}
+	}
+	// 블록 내리기
+	function gameStart(){
+		startInterval = setInterval(()=>{
+			
+			clearCerrentBlock();
+			moveDown();
+			updateCerrentBlock();
+			updateMap();
+		},500);
+	}
+
+	// game start
+	newBlock();
+	updateCerrentBlock();
+	updateMap();
+	gameStart();
+	
+
+</script>
